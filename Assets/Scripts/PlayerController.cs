@@ -1,41 +1,43 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI; // Required for the Text component
 
 public class PlayerController : MonoBehaviour
 {
+    public Text scoreText; // Link the scoreText UI element in the Inspector
     public float Speed = 5f; // Movement speed
-    public int Score = 0;   // Player's score
     public int health = 5; // Player's health
 
-    private Rigidbody rb;
+    private int score; // Player's score
+    private Rigidbody rb; // Rigidbody component reference
 
     void Start()
     {
+        score = 0; // Initialize score
+        SetScoreText(); // Update the scoreText UI
         rb = GetComponent<Rigidbody>(); // Get the Rigidbody component
     }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Goal"))
         {
             Debug.Log("You Win!");
         }
+
         if (other.CompareTag("Trap"))
         {
-            health--;
+            health--; // Decrease health
             Debug.Log("Health: " + health);
         }
-        // Check if the colliding object is tagged as "Pickup"
+
         if (other.CompareTag("Pickup"))
         {
-            // Increment the score
-            Score++;
+            score++; // Increment the score
+            SetScoreText(); // Update the scoreText UI
+            //Debug.Log("score: " + score); // Log the updated score
 
-            // Log the new score to the console
-            Debug.Log("Score: " + Score);
-
-            // Disable or destroy the coin object
-            other.gameObject.SetActive(false); // Option 1: Disable
-            // Destroy(other.gameObject);      // Option 2: Destroy
+            other.gameObject.SetActive(false); // Disable the Pickup object
         }
     }
 
@@ -43,8 +45,8 @@ public class PlayerController : MonoBehaviour
     {
         if (health <= 0)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             Debug.Log("Game Over!");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Restart the scene
         }
     }
 
@@ -57,15 +59,20 @@ public class PlayerController : MonoBehaviour
         // Create a movement vector
         Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
 
+        // Adjust movement speed for sprinting
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
-            // Double the movement speed
-            rb.linearVelocity = movement * Speed * 2;
+            rb.linearVelocity = movement * Speed * 2; // Double speed
         }
         else
         {
-            // Apply normal movement speed to the Rigidbody
-            rb.linearVelocity = movement * Speed;
+            rb.linearVelocity = movement * Speed; // Normal speed
         }
+    }
+
+    void SetScoreText()
+    {
+        // Update the scoreText UI with the current score
+        scoreText.text = "Score: " + score.ToString();
     }
 }
