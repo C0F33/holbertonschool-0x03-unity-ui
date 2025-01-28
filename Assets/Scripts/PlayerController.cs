@@ -4,6 +4,7 @@ using UnityEngine.UI; // Required for the Text component
 
 public class PlayerController : MonoBehaviour
 {
+    public Text healthText; //link the healthText to UI elemnt in the Inspector
     public Text scoreText; // Link the scoreText UI element in the Inspector
     public float Speed = 5f; // Movement speed
     public int health = 5; // Player's health
@@ -28,7 +29,8 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Trap"))
         {
             health--; // Decrease health
-            Debug.Log("Health: " + health);
+            SetHealthText();
+            //Debug.Log("Health: " + health);
         }
 
         if (other.CompareTag("Pickup"))
@@ -74,5 +76,10 @@ public class PlayerController : MonoBehaviour
     {
         // Update the scoreText UI with the current score
         scoreText.text = "Score: " + score.ToString();
+    }
+
+    void SetHealthText()
+    {
+        healthText.text = "Health: " + health.ToString();
     }
 }
