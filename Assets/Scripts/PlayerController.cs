@@ -1,9 +1,12 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI; // Required for the Text component
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject WinLoseBG;
+    public Text WinLoseText;
     public Text healthText; //link the healthText to UI elemnt in the Inspector
     public Text scoreText; // Link the scoreText UI element in the Inspector
     public float Speed = 5f; // Movement speed
@@ -11,6 +14,14 @@ public class PlayerController : MonoBehaviour
 
     private int score; // Player's score
     private Rigidbody rb; // Rigidbody component reference
+    IEnumerator LoadScene(float seconds)
+    {
+        // Wait for the specified number of seconds
+        yield return new WaitForSeconds(seconds);
+
+        // Reload the current scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 
     void Start()
     {
@@ -23,7 +34,12 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Goal"))
         {
-            Debug.Log("You Win!");
+            WinLoseText.text = "You Win!";
+            WinLoseText.color = Color.black;
+            WinLoseBG.GetComponent<Image>().color = Color.green;
+            WinLoseBG.SetActive(true);
+            StartCoroutine(LoadScene(3));
+            //Debug.Log("You Win!");
         }
 
         if (other.CompareTag("Trap"))
@@ -47,8 +63,20 @@ public class PlayerController : MonoBehaviour
     {
         if (health <= 0)
         {
-            Debug.Log("Game Over!");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Restart the scene
+            WinLoseText.text = "Game Over!";
+
+            // Change text color to white
+            WinLoseText.color = Color.white;
+
+            // Change background color to red
+            WinLoseBG.GetComponent<Image>().color = Color.red;
+
+            // Activate the WinLoseBG GameObject
+            WinLoseBG.SetActive(true);
+            
+            //Debug.Log("Game Over!");
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Restart the scene
+            StartCoroutine(LoadScene(3));
         }
     }
 
