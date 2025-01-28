@@ -769,7 +769,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: Options
 --- !u!222 &1831782298
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -848,7 +848,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: Quit
 --- !u!222 &1936081248
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1006,6 +1006,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2025931049}
     m_Modifications:
+    - target: {fileID: 1660973550268083979, guid: 14c445dd97c7845679e4cc7be80b4758,
+        type: 3}
+      propertyPath: m_Text
+      value: Play
+      objectReference: {fileID: 0}
     - target: {fileID: 1831153065914720381, guid: 14c445dd97c7845679e4cc7be80b4758,
         type: 3}
       propertyPath: m_Name
