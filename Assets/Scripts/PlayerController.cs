@@ -78,6 +78,10 @@ public class PlayerController : MonoBehaviour
             //SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Restart the scene
             StartCoroutine(LoadScene(3));
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("menu"); // Replace "MenuScene" with the actual name of your menu scene
+        }
     }
 
     void FixedUpdate()
