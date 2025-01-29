@@ -7,27 +7,31 @@ public class PlayerController : MonoBehaviour
 {
     public GameObject WinLoseBG;
     public Text WinLoseText;
-    public Text healthText; //link the healthText to UI elemnt in the Inspector
+    public Text healthText; // Link the healthText to UI element in the Inspector
     public Text scoreText; // Link the scoreText UI element in the Inspector
     public float Speed = 5f; // Movement speed
     public int health = 5; // Player's health
 
     private int score; // Player's score
     private Rigidbody rb; // Rigidbody component reference
+
+    // IEnumerator for scene reloading after a delay
     IEnumerator LoadScene(float seconds)
     {
-        // Wait for the specified number of seconds
-        yield return new WaitForSeconds(seconds);
-
-        // Reload the current scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        yield return new WaitForSeconds(seconds); // Wait for the specified time
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reload the current scene
     }
 
     void Start()
     {
         score = 0; // Initialize score
         SetScoreText(); // Update the scoreText UI
+        health = 5; // Reset health if needed
+        SetHealthText(); // Update the healthText UI
         rb = GetComponent<Rigidbody>(); // Get the Rigidbody component
+        
+        // Ensure WinLoseBG is inactive at the start
+        WinLoseBG.SetActive(false); 
     }
 
     void OnTriggerEnter(Collider other)
@@ -37,24 +41,20 @@ public class PlayerController : MonoBehaviour
             WinLoseText.text = "You Win!";
             WinLoseText.color = Color.black;
             WinLoseBG.GetComponent<Image>().color = Color.green;
-            WinLoseBG.SetActive(true);
-            StartCoroutine(LoadScene(3));
-            //Debug.Log("You Win!");
+            WinLoseBG.SetActive(true); // Show the WinLoseBG when player wins
+            StartCoroutine(LoadScene(3)); // Reload the scene after 3 seconds
         }
 
         if (other.CompareTag("Trap"))
         {
             health--; // Decrease health
-            SetHealthText();
-            //Debug.Log("Health: " + health);
+            SetHealthText(); // Update health UI
         }
 
         if (other.CompareTag("Pickup"))
         {
-            score++; // Increment the score
-            SetScoreText(); // Update the scoreText UI
-            //Debug.Log("score: " + score); // Log the updated score
-
+            score++; // Increment score
+            SetScoreText(); // Update score UI
             other.gameObject.SetActive(false); // Disable the Pickup object
         }
     }
@@ -64,23 +64,15 @@ public class PlayerController : MonoBehaviour
         if (health <= 0)
         {
             WinLoseText.text = "Game Over!";
-
-            // Change text color to white
             WinLoseText.color = Color.white;
-
-            // Change background color to red
             WinLoseBG.GetComponent<Image>().color = Color.red;
-
-            // Activate the WinLoseBG GameObject
-            WinLoseBG.SetActive(true);
-            
-            //Debug.Log("Game Over!");
-            //SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Restart the scene
-            StartCoroutine(LoadScene(3));
+            WinLoseBG.SetActive(true); // Show the WinLoseBG when player loses
+            StartCoroutine(LoadScene(3)); // Reload the scene after 3 seconds
         }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene("menu"); // Replace "MenuScene" with the actual name of your menu scene
+            SceneManager.LoadScene("menu"); // Replace "menu" with the actual name of your menu scene
         }
     }
 
@@ -112,6 +104,7 @@ public class PlayerController : MonoBehaviour
 
     void SetHealthText()
     {
+        // Update the healthText UI with the current health
         healthText.text = "Health: " + health.ToString();
     }
 }
